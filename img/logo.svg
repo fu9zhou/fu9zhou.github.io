@@ -1,18 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="274.686" height="128.3" viewBox="0 0 274.686 128.3">
-  <g id="组_23" data-name="组 23" transform="translate(-49 -81)">
-    <g id="logo" transform="translate(-262.994 -135.328)">
-      <g id="组_4" data-name="组 4" transform="translate(464.294 229.429)">
-        <g id="组_3" data-name="组 3" transform="translate(0 0)">
-          <g id="组_2" data-name="组 2">
-            <g id="组_1" data-name="组 1">
-              <path id="路径_1" data-name="路径 1" d="M41.919-37.65h26.7l8.951-67.631H55.68l1.93-14.314h67.437l-1.923,14.314H102.2L93.259-37.65h26.425l-2.063,14.744H39.856ZM26.368-20.272H2.83L16.039-61.314H39.576ZM40.4-66.865H16.872l-1.93-24.977H38.479Zm3.993-30.528H20.857L18.934-122.37H42.472Z" transform="translate(-2.83 122.37)" fill="#0076cf" stroke="#0076cf" stroke-width="0.295"/>
-            </g>
-          </g>
-        </g>
-      </g>
-    </g>
-    <g id="组_22" data-name="组 22">
-      <g id="组_1-2" data-name="组 1" transform="translate(-1059 -455)">
+<svg xmlns="http://www.w3.org/2000/svg" width="650" height="143" viewBox="0 0 650 143">
+  <g id="组_25" data-name="组 25" transform="translate(-49 -263)">
+    <g id="组_24" data-name="组 24" transform="translate(0 189)">
+      <g id="组_1" data-name="组 1" transform="translate(-1059 -455)">
         <g id="favicon" transform="translate(917.107 324.793)">
           <g id="shape_bnNFWV4Z7Q">
             <g id="组_17" data-name="组 17" transform="translate(190.893 211.207)">
@@ -71,5 +60,6 @@
         </g>
       </g>
     </g>
+    <text id="小江的博客" transform="translate(193 373)" fill="#0076cf" font-size="110" font-family="YouSheBiaoTiHei"><tspan x="0" y="0">小江的博客</tspan></text>
   </g>
 </svg>

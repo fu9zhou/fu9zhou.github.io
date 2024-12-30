@@ -10777,6 +10777,7 @@ body > .section {
   margin-top: 0;
 }
 article.media {
+  display: block;
   color: #848484;
 }
 article.media a {
@@ -10799,10 +10800,18 @@ article.media .title {
 }
 article.media .media-content {
   color: #848484;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 article.media .media-content .title {
   margin: 0;
   line-height: inherit;
+  flex: 1;
+  margin-left: 0.4em;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 article.article .article-meta,
 article.article .article-tags {
