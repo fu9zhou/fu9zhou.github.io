@@ -1,0 +1,49 @@
+# 定义 GitHub Action 的名称
+name: Sync to Tencent COS
+
+# 当 gh-pages 分支有新的提交时触发此 Action
+on:
+  push:
+    branches:
+      - gh-pages
+
+jobs:
+  sync:
+    # 选择运行环境，这里使用最新的 Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 拉取代码仓库
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          submodules: true # 递归拉取子模块（如果有）
+          fetch-depth: 0 # 拉取完整历史（防止增量构建出现问题）
+
+      # 2. 设置 Python 环境（coscmd 需要 Python 运行）
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9 # 安装 Python 3.9 版本
+
+      # 3. 安装腾讯云 coscmd 工具
+      - name: Install coscmd
+        run: pip install coscmd # 直接使用 pip 安装 coscmd
+
+      # 4. 配置 coscmd 工具，提供访问凭证和存储桶信息
+      - name: Configure coscmd
+        env:
+          SECRET_ID: ${{ secrets.SecretId }} # 读取 GitHub Secrets 中的 SecretId
+          SECRET_KEY: ${{ secrets.SecretKey }} # 读取 GitHub Secrets 中的 SecretKey
+          BUCKET: ${{ secrets.Bucket }} # 读取 GitHub Secrets 中的 Bucket 名称
+          REGION: ${{ secrets.Region }} # 读取 GitHub Secrets 中的存储区域
+        run: |
+          coscmd config -a "$SECRET_ID" -s "$SECRET_KEY" -b "$BUCKET" -r "$REGION"
+
+      # 5. 通过 coscmd 上传整个代码仓库到 COS
+      - name: Sync Entire Repository to COS
+        run: coscmd upload -rfs --delete ./ /
+        # `-r` 递归上传整个文件夹
+        # `-f` 遇到同名文件时强制覆盖
+        # `-s` 跳过与 COS 上相同的文件（避免重复上传）
+        # `--delete` 删除 COS 上不在 GitHub 仓库中的文件（保持同步）
