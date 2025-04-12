@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>前端鉴权机制 - 小江的技术分享</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="小江的技术分享"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="小江的技术分享"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="&amp;emsp;&amp;emsp;在现代 Web 开发中，身份验证和会话管理是不可或缺的组成部分。HTTP是无状态的协议，为了在用户与服务器之间维持状态，前端和后端需要协同使用一些机制来标识用户身份并保障数据安全。本文将围绕 Cookie、Session、Token、JWT 四种常见方式进行介绍与对比，并结合实际说明 Cookie 在前端的基本操作方法。"><meta property="og:type" content="blog"><meta property="og:title" content="前端鉴权机制"><meta property="og:url" content="https://fu9zhou.com/2025/04/12/%E5%89%8D%E7%AB%AF%E9%89%B4%E6%9D%83%E6%9C%BA%E5%88%B6/"><meta property="og:site_name" content="小江的技术分享"><meta property="og:description" content="&amp;emsp;&amp;emsp;在现代 Web 开发中，身份验证和会话管理是不可或缺的组成部分。HTTP是无状态的协议，为了在用户与服务器之间维持状态，前端和后端需要协同使用一些机制来标识用户身份并保障数据安全。本文将围绕 Cookie、Session、Token、JWT 四种常见方式进行介绍与对比，并结合实际说明 Cookie 在前端的基本操作方法。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://fu9zhou.com/2025/04/12/%E5%89%8D%E7%AB%AF%E9%89%B4%E6%9D%83%E6%9C%BA%E5%88%B6/what-is-jwt.png"><meta property="article:published_time" content="2025-04-12T10:05:26.000Z"><meta property="article:modified_time" content="2025-04-12T10:05:26.000Z"><meta property="article:author" content="Fu9Zhou"><meta property="article:tag" content="JavaScript"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://fu9zhou.com/2025/04/12/%E5%89%8D%E7%AB%AF%E9%89%B4%E6%9D%83%E6%9C%BA%E5%88%B6/what-is-jwt.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://fu9zhou.com/2025/04/12/%E5%89%8D%E7%AB%AF%E9%89%B4%E6%9D%83%E6%9C%BA%E5%88%B6/"},"headline":"前端鉴权机制","image":["https://fu9zhou.com/2025/04/12/%E5%89%8D%E7%AB%AF%E9%89%B4%E6%9D%83%E6%9C%BA%E5%88%B6/what-is-jwt.png"],"datePublished":"2025-04-12T10:05:26.000Z","dateModified":"2025-04-12T10:05:26.000Z","author":{"@type":"Person","name":"Fu9Zhou"},"publisher":{"@type":"Organization","name":"小江的技术分享","logo":{"@type":"ImageObject","url":"https://fu9zhou.com/img/logo.png"}},"description":"&emsp;&emsp;在现代 Web 开发中，身份验证和会话管理是不可或缺的组成部分。HTTP是无状态的协议，为了在用户与服务器之间维持状态，前端和后端需要协同使用一些机制来标识用户身份并保障数据安全。本文将围绕 Cookie、Session、Token、JWT 四种常见方式进行介绍与对比，并结合实际说明 Cookie 在前端的基本操作方法。"}</script><link rel="canonical" href="https://fu9zhou.com/2025/04/12/%E5%89%8D%E7%AB%AF%E9%89%B4%E6%9D%83%E6%9C%BA%E5%88%B6/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?6cc7e72ea91beaff50270729f0b0f860";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.png" alt="小江的技术分享" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">首页</a><a class="navbar-item" href="/archives">文章</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="GitHub" href="https://github.com/fu9zhou"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-04-12T10:05:26.000Z" title="2025/4/12 18:05:26">2025-04-12</time>发表</span><span class="level-item"><a class="link-muted" href="/categories/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/">前端开发</a></span><span class="level-item">16 分钟读完 (大约2418个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">前端鉴权机制</h1><div class="content"><p>&emsp;&emsp;在现代 Web 开发中，<strong>身份验证</strong>和<strong>会话管理</strong>是不可或缺的组成部分。HTTP是无状态的协议，为了在用户与服务器之间维持状态，前端和后端需要协同使用一些机制来标识用户身份并保障数据安全。本文将围绕 Cookie、Session、Token、JWT 四种常见方式进行介绍与对比，并结合实际说明 Cookie 在前端的基本操作方法。</p>
+<span id="more"></span>
+
+<h1 id="Cookie：前端存储的基础工具"><a href="#Cookie：前端存储的基础工具" class="headerlink" title="Cookie：前端存储的基础工具"></a>Cookie：前端存储的基础工具</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>Cookie 是由服务器发送到客户端并保存在浏览器中的一小段文本数据。它通常用于存储用户的会话信息、登录状态、偏好设置等。浏览器在每次请求该服务器时，都会自动携带相应域下的 Cookie，以便服务器识别用户的身份和状态。</p>
+<h2 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h2><ul>
+<li><strong>name&#x2F;value</strong>：键值对形式存储数据，<code>name</code> 是 Cookie 的名称，<code>value</code> 是对应的值。</li>
+<li><strong>expires&#x2F;max-age</strong>：设置 Cookie 的过期时间。<code>expires</code> 是一个固定的日期时间，当到达该时间时 Cookie 将失效。<code>max-age</code> 是一个相对时间，单位为秒，表示从设置 Cookie 时开始多少秒后 Cookie 失效。</li>
+<li><strong>path&#x2F;domain</strong>：限制 Cookie 的作用路径和域名，指定该 Cookie 哪些路径和域名下的请求会带上该 Cookie。</li>
+<li><strong>secure</strong>：仅在 HTTPS 连接下传输该 Cookie，增强安全性，避免在不安全的 HTTP 协议下传输。</li>
+<li><strong>httpOnly</strong>：如果设置了 <code>httpOnly</code> 属性，Cookie 将不能通过 JavaScript 访问，避免被 XSS 攻击窃取。</li>
+<li><strong>sameSite</strong>：控制跨站请求中是否携带 Cookie。可设置为 <code>Strict</code>（严格模式，只有同源请求携带 Cookie）、<code>Lax</code>（宽松模式，部分跨站请求携带 Cookie）或 <code>None</code>（没有限制，所有请求携带 Cookie）。有效防范 CSRF 攻击。</li>
+</ul>
+<h2 id="操作方法"><a href="#操作方法" class="headerlink" title="操作方法"></a>操作方法</h2><p><strong>设置 Cookie</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 设置一个简单的 Cookie</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="property">cookie</span> = <span class="string">&quot;username=Tom; expires=Fri, 01 May 2025 12:00:00 UTC; path=/&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置带有属性的 Cookie</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="property">cookie</span> = <span class="string">&quot;session_id=abc123; expires=Thu, 01 May 2025 12:00:00 UTC; path=/; secure; httpOnly; sameSite=Strict&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>读取 Cookie</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 读取所有 Cookie</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">document</span>.<span class="property">cookie</span>); <span class="comment">// 输出格式: &quot;username=Tom; session_id=abc123&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取特定 Cookie（通过正则匹配）</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getCookie</span>(<span class="params">name</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> match = <span class="variable language_">document</span>.<span class="property">cookie</span>.<span class="title function_">match</span>(<span class="keyword">new</span> <span class="title class_">RegExp</span>(<span class="string">&#x27;(^| )&#x27;</span> + name + <span class="string">&#x27;=([^;]+)&#x27;</span>));</span><br><span class="line">  <span class="keyword">return</span> match ? match[<span class="number">2</span>] : <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">getCookie</span>(<span class="string">&quot;username&quot;</span>)); <span class="comment">// &quot;Tom&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>删除 Cookie</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通过设置过期时间为过去的日期删除 Cookie</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="property">cookie</span> = <span class="string">&quot;username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>注意</strong>：通过 <code>document.cookie</code> 只能操作非 <code>httpOnly</code> 的 Cookie。</p>
+</blockquote>
+<h1 id="Session：服务端管理的会话机制"><a href="#Session：服务端管理的会话机制" class="headerlink" title="Session：服务端管理的会话机制"></a>Session：服务端管理的会话机制</h1><h2 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a>概念</h2><p>Session 是一种由服务器管理的会话机制，用于在用户与服务器之间保持会话状态。在用户登录后，服务器为每个用户创建一个 Session，并生成一个唯一的 Session ID，将其发送到客户端。客户端通常将这个 Session ID 存储在 Cookie 中，每次请求时，浏览器会自动将该 ID 发送到服务器，服务器通过该 ID 识别用户身份并恢复用户状态。</p>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ul>
+<li><strong>数据存储在服务端，安全性较高</strong>：由于用户数据存储在服务器端，不容易受到 XSS 等攻击的威胁，安全性相对较强。</li>
+<li><strong>支持复杂的数据存储</strong>：Session 可以存储更多结构化的信息（如对象、数组等），而不像 Token 那样只能存储简单的字符串。</li>
+</ul>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><ul>
+<li><strong>服务器资源占用</strong>：每个用户会话需要在服务器端占用一定的内存或存储，随着用户数量的增加，服务器负担较重，扩展性较差。</li>
+<li><strong>需要配合 Cookie 或 URL 传递 Session ID</strong>：如果 Cookie 被禁用，Session ID 需要通过 URL 传递，可能会暴露在 URL 中，存在一定的安全风险。</li>
+</ul>
+<h1 id="Token：无状态的身份令牌"><a href="#Token：无状态的身份令牌" class="headerlink" title="Token：无状态的身份令牌"></a>Token：无状态的身份令牌</h1><h2 id="概念-2"><a href="#概念-2" class="headerlink" title="概念"></a>概念</h2><p>Token 是一种用于用户身份验证的字符串凭证，常用于前后端分离架构中。用户登录成功后，服务器会生成一个 Token 并返回给客户端，客户端在后续的请求中将该 Token 作为身份凭证，通过请求头或 URL 参数传回服务器，从而实现鉴权。Token 不依赖服务端存储用户状态，因此称为“无状态”认证机制。</p>
+<h2 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h2><ul>
+<li><strong>无状态、可扩展</strong>：服务器无需记录每个用户的会话数据，天然适合分布式架构和微服务。</li>
+<li><strong>跨平台支持</strong>：Token 通常使用字符串格式，前端、移动端、小程序等都易于集成。</li>
+<li><strong>适合前后端分离</strong>：接口无状态化，前端可灵活控制请求。</li>
+<li><strong>可加密处理</strong>：通过签名或加密机制提升安全性，防止伪造。</li>
+</ul>
+<h2 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h2><ul>
+<li><strong>安全性依赖客户端</strong>：Token 一般保存在本地存储（如 localStorage），容易受到 XSS 攻击。</li>
+<li><strong>无法主动失效</strong>：服务端不记录状态，Token 一旦签发，除非设置过期时间，否则中途无法撤销。</li>
+<li><strong>续期管理复杂</strong>：需要额外设计刷新机制（如 refresh token），以维持长期会话体验。</li>
+</ul>
+<h1 id="JWT：结构化的-Token-实现"><a href="#JWT：结构化的-Token-实现" class="headerlink" title="JWT：结构化的 Token 实现"></a>JWT：结构化的 Token 实现</h1><h2 id="概念-3"><a href="#概念-3" class="headerlink" title="概念"></a>概念</h2><p>JWT（JSON Web Token）是一种开放标准（RFC 7519），用于在网络应用环境间传递声明（claims）。JWT 通常用于身份验证和信息交换，它由三部分组成：</p>
+<img src="/2025/04/12/%E5%89%8D%E7%AB%AF%E9%89%B4%E6%9D%83%E6%9C%BA%E5%88%B6/what-is-jwt.png" class="" title="OAuth vs JWT (JSON Web Tokens): An In-Depth Comparison">
+
+<ul>
+<li><strong>Header</strong>：声明 Token 类型（通常是 JWT）和使用的签名算法（如 HMAC SHA256 或 RSA）。</li>
+<li><strong>Payload</strong>：存储需要传递的数据（如用户信息），该部分是明文可解码的。</li>
+<li><strong>Signature</strong>：由 Header 和 Payload 生成的加密签名，用于验证数据的完整性和防篡改。</li>
+</ul>
+<h2 id="优点-2"><a href="#优点-2" class="headerlink" title="优点"></a>优点</h2><ul>
+<li><strong>自包含</strong>：JWT 将认证所需的所有信息包含在内，无需在服务端存储会话数据，便于分布式系统使用。</li>
+<li><strong>无状态</strong>：JWT 不依赖服务端存储，适合大规模分布式系统和微服务架构。</li>
+<li><strong>跨域支持</strong>：由于其无状态特性，JWT 易于跨域传输，非常适合前后端分离的项目。</li>
+<li><strong>可加密和签名</strong>：JWT 可以使用密钥签名，防止数据篡改，也可以加密确保数据的机密性。</li>
+</ul>
+<h2 id="缺点-2"><a href="#缺点-2" class="headerlink" title="缺点"></a>缺点</h2><ul>
+<li><strong>明文数据暴露</strong>：Payload 部分是明文数据，虽然签名保证数据完整性，但敏感信息仍然暴露在 Token 内，使用时需谨慎。</li>
+<li><strong>Token 管理复杂</strong>：JWT 的无状态特性意味着服务端无法强制失效某个 Token，因此需要额外设计 Token 刷新机制或过期时间。</li>
+<li><strong>过期管理</strong>：Token 的过期时间通常较短，但刷新机制的实现增加了系统复杂度。</li>
+</ul>
+<h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><ul>
+<li><strong>前后端分离项目的用户认证</strong>：JWT 可在用户登录后返回给前端，前端每次请求时携带 Token 进行认证。</li>
+<li><strong>API 接口鉴权</strong>：用于保护接口资源，仅授权的用户可访问。</li>
+<li><strong>单点登录（SSO）</strong>：不同系统间共享认证信息，减少用户的多次登录操作。</li>
+</ul>
+<h1 id="区别分析"><a href="#区别分析" class="headerlink" title="区别分析"></a>区别分析</h1><p>先是一张别，总结一下上面的四点。</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Cookie</th>
+<th>Session</th>
+<th>Token</th>
+<th>JWT</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>存储位置</td>
+<td>客户端</td>
+<td>服务端</td>
+<td>客户端</td>
+<td>客户端</td>
+</tr>
+<tr>
+<td>安全性</td>
+<td>较低（需配置）</td>
+<td>较高</td>
+<td>中等（加密可提高）</td>
+<td>中等（加密可提高）</td>
+</tr>
+<tr>
+<td>是否占用服务端资源</td>
+<td>否</td>
+<td>是</td>
+<td>否</td>
+<td>否</td>
+</tr>
+<tr>
+<td>是否可跨域</td>
+<td>否（需设置）</td>
+<td>否</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>数据结构</td>
+<td>键值对</td>
+<td>可存对象</td>
+<td>字符串</td>
+<td>JSON结构</td>
+</tr>
+<tr>
+<td>管理复杂性</td>
+<td>简单</td>
+<td>中等</td>
+<td>中等</td>
+<td>略复杂</td>
+</tr>
+</tbody></table>
+<h2 id="存储方式"><a href="#存储方式" class="headerlink" title="存储方式"></a>存储方式</h2><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>存储位置</th>
+<th>控制方</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cookie</td>
+<td>浏览器自动保存（<code>document.cookie</code>）</td>
+<td>服务端可设置（<code>Set-Cookie</code>）或客户端设置</td>
+</tr>
+<tr>
+<td>Token（通常是JWT）</td>
+<td>本地存储（<code>localStorage</code>、<code>sessionStorage</code>）或手动存入Cookie</td>
+<td>前端开发者手动控制</td>
+</tr>
+</tbody></table>
+<h2 id="发送方式"><a href="#发送方式" class="headerlink" title="发送方式"></a>发送方式</h2><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>是否自动携带</th>
+<th>携带方式</th>
+<th>控制方</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cookie</td>
+<td>✅ 自动携带（只要是同源或设置了<code>withCredentials</code>）</td>
+<td>HTTP 请求头中的 <code>Cookie</code> 字段</td>
+<td>浏览器自动或开发者设置</td>
+</tr>
+<tr>
+<td>Token（JWT）</td>
+<td>❌ 手动携带</td>
+<td>通常放在 <code>Authorization</code> 头（如 <code>Bearer xxx</code>）或其他自定义头部</td>
+<td>开发者手动设置请求头</td>
+</tr>
+</tbody></table>
+<h2 id="JWT-与-Token-Cookie-的关系"><a href="#JWT-与-Token-Cookie-的关系" class="headerlink" title="JWT 与 Token &#x2F; Cookie  的关系"></a>JWT 与 Token &#x2F; Cookie  的关系</h2><ul>
+<li><strong>JWT</strong> 是一种 <strong>Token</strong> 的格式，用来做身份验证（比如用户登录后返回的 token）。</li>
+<li>通常我们把 JWT 存在 <code>localStorage</code> 或 <code>sessionStorage</code> 中，并在每次请求时 <strong>手动带上</strong>。</li>
+<li>❗也可以把 JWT 存在 <strong>Cookie</strong> 里，这样就可以配合浏览器自动发送，但要小心 <code>CSRF</code> 风险。</li>
+</ul>
+<h2 id="Session-与-Cookie-的关系"><a href="#Session-与-Cookie-的关系" class="headerlink" title="Session 与 Cookie 的关系"></a>Session 与 Cookie 的关系</h2><p>传统 Web 登录是 <strong>Session + Cookie</strong> 组合：</p>
+<ul>
+<li>服务端创建 Session，分配一个唯一 ID（<code>session_id</code>），并通过 <code>Set-Cookie</code> 写入浏览器。</li>
+</ul>
+<ul>
+<li>浏览器之后的请求会自动携带这个 Cookie，服务端用这个 ID 找回 Session。</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>前端鉴权机制</p><p><a href="https://fu9zhou.com/2025/04/12/前端鉴权机制/">https://fu9zhou.com/2025/04/12/前端鉴权机制/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>Fu9Zhou</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2025-04-12</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="/httpscreativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/JavaScript/">JavaScript</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2025/04/12/undefined%E5%92%8Cnull%E4%B8%BA%E4%BB%80%E4%B9%88%E7%9B%B8%E5%90%8C/"><span class="level-item">undefined和null为什么相同</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#Cookie：前端存储的基础工具"><span class="level-left"><span class="level-item">1</span><span class="level-item">Cookie：前端存储的基础工具</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#概念"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">概念</span></span></a></li><li><a class="level is-mobile" href="#属性"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">属性</span></span></a></li><li><a class="level is-mobile" href="#操作方法"><span class="level-left"><span class="level-item">1.3</span><span class="level-item">操作方法</span></span></a></li></ul></li><li><a class="level is-mobile" href="#Session：服务端管理的会话机制"><span class="level-left"><span class="level-item">2</span><span class="level-item">Session：服务端管理的会话机制</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#概念-1"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">概念</span></span></a></li><li><a class="level is-mobile" href="#优点"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">优点</span></span></a></li><li><a class="level is-mobile" href="#缺点"><span class="level-left"><span class="level-item">2.3</span><span class="level-item">缺点</span></span></a></li></ul></li><li><a class="level is-mobile" href="#Token：无状态的身份令牌"><span class="level-left"><span class="level-item">3</span><span class="level-item">Token：无状态的身份令牌</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#概念-2"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">概念</span></span></a></li><li><a class="level is-mobile" href="#优点-1"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">优点</span></span></a></li><li><a class="level is-mobile" href="#缺点-1"><span class="level-left"><span class="level-item">3.3</span><span class="level-item">缺点</span></span></a></li></ul></li><li><a class="level is-mobile" href="#JWT：结构化的-Token-实现"><span class="level-left"><span class="level-item">4</span><span class="level-item">JWT：结构化的 Token 实现</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#概念-3"><span class="level-left"><span class="level-item">4.1</span><span class="level-item">概念</span></span></a></li><li><a class="level is-mobile" href="#优点-2"><span class="level-left"><span class="level-item">4.2</span><span class="level-item">优点</span></span></a></li><li><a class="level is-mobile" href="#缺点-2"><span class="level-left"><span class="level-item">4.3</span><span class="level-item">缺点</span></span></a></li><li><a class="level is-mobile" href="#场景"><span class="level-left"><span class="level-item">4.4</span><span class="level-item">场景</span></span></a></li></ul></li><li><a class="level is-mobile" href="#区别分析"><span class="level-left"><span class="level-item">5</span><span class="level-item">区别分析</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#存储方式"><span class="level-left"><span class="level-item">5.1</span><span class="level-item">存储方式</span></span></a></li><li><a class="level is-mobile" href="#发送方式"><span class="level-left"><span class="level-item">5.2</span><span class="level-item">发送方式</span></span></a></li><li><a class="level is-mobile" href="#JWT-与-Token-Cookie-的关系"><span class="level-left"><span class="level-item">5.3</span><span class="level-item">JWT 与 Token / Cookie  的关系</span></span></a></li><li><a class="level is-mobile" href="#Session-与-Cookie-的关系"><span class="level-left"><span class="level-item">5.4</span><span class="level-item">Session 与 Cookie 的关系</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-04-12T10:05:26.000Z">2025-04-12</time></p><p class="title"><a href="/2025/04/12/%E5%89%8D%E7%AB%AF%E9%89%B4%E6%9D%83%E6%9C%BA%E5%88%B6/">前端鉴权机制</a></p><p class="categories"><a href="/categories/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/">前端开发</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-04-12T08:40:01.000Z">2025-04-12</time></p><p class="title"><a href="/2025/04/12/undefined%E5%92%8Cnull%E4%B8%BA%E4%BB%80%E4%B9%88%E7%9B%B8%E5%90%8C/">undefined和null为什么相同</a></p><p class="categories"><a href="/categories/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/">前端开发</a> / <a href="/categories/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/">基础语法</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-15T02:59:53.000Z">2025-03-15</time></p><p class="title"><a href="/2025/03/15/JavaScript%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95%E9%A2%98/">JavaScript基础算法题</a></p><p class="categories"><a href="/categories/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/">前端开发</a> / <a href="/categories/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/">基础语法</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-14T10:56:56.000Z">2025-03-14</time></p><p class="title"><a href="/2025/03/14/%E6%97%A0%E7%BC%9D%E6%BB%9A%E5%8A%A8%E5%8A%A8%E7%94%BB/">无缝滚动动画</a></p><p class="categories"><a href="/categories/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/">前端开发</a> / <a href="/categories/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/">基础语法</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-10T08:16:35.000Z">2025-03-10</time></p><p class="title"><a href="/2025/03/10/%E7%B1%BB%E5%AE%9E%E4%BE%8B%E5%B1%9E%E6%80%A7%E7%8A%B6%E6%80%81%E6%AE%8B%E7%95%99%E9%97%AE%E9%A2%98/">类实例属性状态残留问题</a></p><p class="categories"><a href="/categories/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/">前端开发</a></p></div></article></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.png" alt="小江的技术分享" height="28"></a><p class="is-size-7"><span>&copy; 2025 Fu9Zhou</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p><p class="is-size-7"> <p><a style="color:#4a4a4a;" target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">闽ICP备2025084052号-1</a></p> <p><a style="color:#4a4a4a;" target="_blank" rel="noopener" href="http://copyright.fjxuanchuan.cn/api/qkl/File/media/nas/newFileModel/2025/1/10/1944ee8d7655b8909fb6fe14d379a7e29a50da53eb4/OwnerCertificate.jpg">闽作登字-2025-F-00008490</a></p> <p> <img src="/img/gwab.png" style="width: 16px;"> <a style="color:#4a4a4a;" target="_blank" rel="noopener" href="https://beian.mps.gov.cn/#/query/webSearch?code=35010402351694">闽公网安备35010402351694号</a> </p> </p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="GitHub" href="https://github.com/fu9zhou"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><script src="/js/pjax.js"></script><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
