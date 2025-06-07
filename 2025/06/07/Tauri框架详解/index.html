@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Tauri框架详解 - 小江的技术分享</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="小江的技术分享"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="小江的技术分享"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="&amp;emsp;&amp;emsp;Tauri 是一个新兴的桌面应用开发框架，它使用 Rust 构建底层逻辑，前端则采用 Web 技术栈。与传统的 Electron 相比，Tauri 提供了更小的打包体积和更高的安全性，逐渐成为跨平台桌面应用的热门选择。"><meta property="og:type" content="blog"><meta property="og:title" content="Tauri框架详解"><meta property="og:url" content="https://fu9zhou.com/2025/06/07/Tauri%E6%A1%86%E6%9E%B6%E8%AF%A6%E8%A7%A3/"><meta property="og:site_name" content="小江的技术分享"><meta property="og:description" content="&amp;emsp;&amp;emsp;Tauri 是一个新兴的桌面应用开发框架，它使用 Rust 构建底层逻辑，前端则采用 Web 技术栈。与传统的 Electron 相比，Tauri 提供了更小的打包体积和更高的安全性，逐渐成为跨平台桌面应用的热门选择。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://fu9zhou.com/img/og_image.png"><meta property="article:published_time" content="2025-06-07T00:23:23.000Z"><meta property="article:modified_time" content="2025-06-07T00:23:23.000Z"><meta property="article:author" content="Fu9Zhou"><meta property="article:tag" content="前端框架"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://fu9zhou.com/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://fu9zhou.com/2025/06/07/Tauri%E6%A1%86%E6%9E%B6%E8%AF%A6%E8%A7%A3/"},"headline":"Tauri框架详解","image":["https://fu9zhou.com/img/og_image.png"],"datePublished":"2025-06-07T00:23:23.000Z","dateModified":"2025-06-07T00:23:23.000Z","author":{"@type":"Person","name":"Fu9Zhou"},"publisher":{"@type":"Organization","name":"小江的技术分享","logo":{"@type":"ImageObject","url":"https://fu9zhou.com/img/logo.png"}},"description":"&emsp;&emsp;Tauri 是一个新兴的桌面应用开发框架，它使用 Rust 构建底层逻辑，前端则采用 Web 技术栈。与传统的 Electron 相比，Tauri 提供了更小的打包体积和更高的安全性，逐渐成为跨平台桌面应用的热门选择。"}</script><link rel="canonical" href="https://fu9zhou.com/2025/06/07/Tauri%E6%A1%86%E6%9E%B6%E8%AF%A6%E8%A7%A3/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?6cc7e72ea91beaff50270729f0b0f860";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.png" alt="小江的技术分享" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">首页</a><a class="navbar-item" href="/archives">文章</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="GitHub" href="https://github.com/fu9zhou"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-06-07T00:23:23.000Z" title="2025/6/7 08:23:23">2025-06-07</time>发表</span><span class="level-item"><a class="link-muted" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a><span> / </span><a class="link-muted" href="/categories/%E5%89%8D%E7%AB%AF/%E5%BA%93%E5%92%8C%E6%A1%86%E6%9E%B6/">库和框架</a></span><span class="level-item">7 分钟读完 (大约1075个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">Tauri框架详解</h1><div class="content"><p>&emsp;&emsp;<code>Tauri</code> 是一个新兴的桌面应用开发框架，它使用 <code>Rust</code> 构建底层逻辑，前端则采用 <code>Web</code> 技术栈。与传统的 <code>Electron</code> 相比，<code>Tauri</code> 提供了更小的打包体积和更高的安全性，逐渐成为跨平台桌面应用的热门选择。</p>
+<span id="more"></span>
+
+<h1 id="Tauri-是什么？"><a href="#Tauri-是什么？" class="headerlink" title="Tauri 是什么？"></a>Tauri 是什么？</h1><p><code>Tauri</code> 是一个用于构建跨平台桌面应用的框架。它结合了系统级的 <code>Rust</code> 后端与基于 <code>Webview</code> 的前端界面，使得开发者可以用 <code>React</code>、<code>Vue</code>、<code>Svelte</code> 等前端框架快速构建 <code>UI</code>，同时用 <code>Rust</code> 提供系统功能支持。</p>
+<p><code>Tauri</code> 的主要特性包括：</p>
+<ul>
+<li>支持 Windows、macOS 和 Linux。</li>
+<li>打包体积小（甚至低于 5MB）。</li>
+<li>安全性高（严格的 API 权限模型）。</li>
+<li>启动速度快、资源占用低。</li>
+<li>支持原生窗口控制、文件操作、通知等。</li>
+</ul>
+<h1 id="Tauri-与-Electron"><a href="#Tauri-与-Electron" class="headerlink" title="Tauri 与 Electron"></a>Tauri 与 Electron</h1><table>
+<thead>
+<tr>
+<th align="center">对比项</th>
+<th align="center">Tauri</th>
+<th align="center">Electron</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">底层语言</td>
+<td align="center">Rust</td>
+<td align="center">Node.js + Chromium</td>
+</tr>
+<tr>
+<td align="center">体积大小</td>
+<td align="center">几 MB</td>
+<td align="center">通常几十 MB 到上百 MB</td>
+</tr>
+<tr>
+<td align="center">内存占用</td>
+<td align="center">较低</td>
+<td align="center">较高</td>
+</tr>
+<tr>
+<td align="center">前端技术栈</td>
+<td align="center">任意 Web 技术</td>
+<td align="center">任意 Web 技术</td>
+</tr>
+<tr>
+<td align="center">安全性</td>
+<td align="center">更强，基于权限声明和沙箱</td>
+<td align="center">相对较弱</td>
+</tr>
+<tr>
+<td align="center">执行性能</td>
+<td align="center">快速，基于原生调用</td>
+<td align="center">较慢，运行在完整浏览器内核</td>
+</tr>
+<tr>
+<td align="center">社区与成熟度</td>
+<td align="center">新兴，但快速增长</td>
+<td align="center">成熟，生态丰富</td>
+</tr>
+</tbody></table>
+<h1 id="Tauri-的架构设计"><a href="#Tauri-的架构设计" class="headerlink" title="Tauri 的架构设计"></a>Tauri 的架构设计</h1><p><code>Tauri</code> 主要由以下几部分组成：</p>
+<ol>
+<li><strong>前端界面（Webview）</strong>：你可以使用任何支持构建 HTML&#x2F;CSS&#x2F;JS 的框架，如 Vue、React、Svelte 等。</li>
+<li><strong>后端逻辑（Rust）</strong>：用于处理系统级操作，如文件读写、窗口控制、进程管理等。</li>
+<li><strong>通信桥梁</strong>：前端通过 <code>invoke</code> 与后端通信，后端通过 <code>command</code> 注册函数。</li>
+</ol>
+<p>前端代码示例：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; invoke &#125; <span class="keyword">from</span> <span class="string">&#x27;@tauri-apps/api/tauri&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="title function_">invoke</span>(<span class="string">&#x27;greet&#x27;</span>, &#123; <span class="attr">name</span>: <span class="string">&#x27;小明&#x27;</span> &#125;).<span class="title function_">then</span>(<span class="function">(<span class="params">response</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(response) <span class="comment">// 输出：你好，小明</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>Rust 后端代码示例：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#[tauri::command]</span></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">greet</span>(name: <span class="type">String</span>) <span class="punctuation">-&gt;</span> <span class="type">String</span> &#123;</span><br><span class="line">    <span class="built_in">format!</span>(<span class="string">&quot;你好，&#123;&#125;!&quot;</span>, name)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="快速上手指南"><a href="#快速上手指南" class="headerlink" title="快速上手指南"></a>快速上手指南</h1><h2 id="安装前置工具"><a href="#安装前置工具" class="headerlink" title="安装前置工具"></a>安装前置工具</h2><ul>
+<li><p>安装 Rust：<code>https://rustup.rs</code></p>
+</li>
+<li><p>安装 Node.js 和包管理工具（npm&#x2F;yarn&#x2F;pnpm）</p>
+</li>
+<li><p>安装 Tauri CLI：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cargo install create-tauri-app</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h2><p>以 Vite + React + TypeScript 为例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">npm create vite@latest my-tauri-app -- --template react-ts</span><br><span class="line"><span class="built_in">cd</span> my-tauri-app</span><br><span class="line">npm install</span><br><span class="line">npx tauri init</span><br><span class="line">npm run tauri dev</span><br></pre></td></tr></table></figure>
+
+<h2 id="项目结构说明"><a href="#项目结构说明" class="headerlink" title="项目结构说明"></a>项目结构说明</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">my-tauri-app/</span><br><span class="line">├─ src/               // 前端代码</span><br><span class="line">├─ src-tauri/         // Rust 后端代码</span><br><span class="line">│  ├─ tauri.conf.json // 配置文件</span><br><span class="line">│  └─ main.rs         // 应用入口</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置与构建"><a href="#配置与构建" class="headerlink" title="配置与构建"></a>配置与构建</h2><p>配置文件位于 <code>src-tauri/tauri.conf.json</code>，你可以配置窗口大小、图标、应用名称、权限限制等。</p>
+<p>构建命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run tauri build</span><br></pre></td></tr></table></figure>
+
+<p>生成的可执行文件将保存在 <code>src-tauri/target/release/bundle</code> 下。</p>
+<h1 id="常用功能实践"><a href="#常用功能实践" class="headerlink" title="常用功能实践"></a>常用功能实践</h1><h2 id="调用后端命令"><a href="#调用后端命令" class="headerlink" title="调用后端命令"></a>调用后端命令</h2><p>前端通过 <code>invoke</code> 调用 Rust 命令，命令需要在 <code>main.rs</code> 中通过 <code>#[tauri::command]</code> 注册。</p>
+<h2 id="文件系统操作"><a href="#文件系统操作" class="headerlink" title="文件系统操作"></a>文件系统操作</h2><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; readTextFile, writeFile &#125; <span class="keyword">from</span> <span class="string">&#x27;@tauri-apps/api/fs&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">await</span> <span class="title function_">writeFile</span>(&#123; <span class="attr">path</span>: <span class="string">&#x27;data.txt&#x27;</span>, <span class="attr">contents</span>: <span class="string">&#x27;hello&#x27;</span> &#125;)</span><br><span class="line"><span class="keyword">const</span> content = <span class="keyword">await</span> <span class="title function_">readTextFile</span>(<span class="string">&#x27;data.txt&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="自定义窗口"><a href="#自定义窗口" class="headerlink" title="自定义窗口"></a>自定义窗口</h2><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; appWindow &#125; <span class="keyword">from</span> <span class="string">&#x27;@tauri-apps/api/window&#x27;</span></span><br><span class="line"></span><br><span class="line">appWindow.<span class="title function_">minimize</span>()</span><br><span class="line">appWindow.<span class="title function_">close</span>()</span><br></pre></td></tr></table></figure>
+
+<h2 id="系统通知"><a href="#系统通知" class="headerlink" title="系统通知"></a>系统通知</h2><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; notify &#125; <span class="keyword">from</span> <span class="string">&#x27;@tauri-apps/api/notification&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="title function_">notify</span>(<span class="string">&#x27;任务完成！&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h1 id="相关使用场景"><a href="#相关使用场景" class="headerlink" title="相关使用场景"></a>相关使用场景</h1><p>Tauri 特别适合以下类型的桌面应用：</p>
+<ul>
+<li>笔记、任务、日历等工具类应用</li>
+<li>Markdown 编辑器、终端工具、配置面板</li>
+<li>私有后台管理桌面客户端</li>
+<li>追求高性能和轻量部署的内部工具</li>
+</ul>
+<h1 id="不足与注意事项"><a href="#不足与注意事项" class="headerlink" title="不足与注意事项"></a>不足与注意事项</h1><ul>
+<li>开发中涉及 Rust，需要一定的学习成本。</li>
+<li>Webview2（Windows）需用户本地已安装，否则需额外下载。</li>
+<li>部分高级桌面功能需要手动扩展 Rust 插件。</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Tauri 提供了一种更现代、更轻量的方式来构建桌面应用。通过前端 + Rust 的组合，它既保留了 Web 开发的快速构建能力，又具备原生应用的性能与系统集成能力。对于需要控制体积、安全性要求高、或希望减少资源占用的项目来说，Tauri 是一个值得认真考虑的方案。</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>Tauri框架详解</p><p><a href="https://fu9zhou.com/2025/06/07/Tauri框架详解/">https://fu9zhou.com/2025/06/07/Tauri框架详解/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>Fu9Zhou</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2025-06-07</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="/httpscreativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6/">前端框架</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2025/06/05/%E5%9C%A8Markdown%E4%B8%AD%E6%8F%92%E5%85%A5Video/"><span class="level-item">在Markdown中插入Video</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#Tauri-是什么？"><span class="level-left"><span class="level-item">1</span><span class="level-item">Tauri 是什么？</span></span></a></li><li><a class="level is-mobile" href="#Tauri-与-Electron"><span class="level-left"><span class="level-item">2</span><span class="level-item">Tauri 与 Electron</span></span></a></li><li><a class="level is-mobile" href="#Tauri-的架构设计"><span class="level-left"><span class="level-item">3</span><span class="level-item">Tauri 的架构设计</span></span></a></li><li><a class="level is-mobile" href="#快速上手指南"><span class="level-left"><span class="level-item">4</span><span class="level-item">快速上手指南</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#安装前置工具"><span class="level-left"><span class="level-item">4.1</span><span class="level-item">安装前置工具</span></span></a></li><li><a class="level is-mobile" href="#创建项目"><span class="level-left"><span class="level-item">4.2</span><span class="level-item">创建项目</span></span></a></li><li><a class="level is-mobile" href="#项目结构说明"><span class="level-left"><span class="level-item">4.3</span><span class="level-item">项目结构说明</span></span></a></li><li><a class="level is-mobile" href="#配置与构建"><span class="level-left"><span class="level-item">4.4</span><span class="level-item">配置与构建</span></span></a></li></ul></li><li><a class="level is-mobile" href="#常用功能实践"><span class="level-left"><span class="level-item">5</span><span class="level-item">常用功能实践</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#调用后端命令"><span class="level-left"><span class="level-item">5.1</span><span class="level-item">调用后端命令</span></span></a></li><li><a class="level is-mobile" href="#文件系统操作"><span class="level-left"><span class="level-item">5.2</span><span class="level-item">文件系统操作</span></span></a></li><li><a class="level is-mobile" href="#自定义窗口"><span class="level-left"><span class="level-item">5.3</span><span class="level-item">自定义窗口</span></span></a></li><li><a class="level is-mobile" href="#系统通知"><span class="level-left"><span class="level-item">5.4</span><span class="level-item">系统通知</span></span></a></li></ul></li><li><a class="level is-mobile" href="#相关使用场景"><span class="level-left"><span class="level-item">6</span><span class="level-item">相关使用场景</span></span></a></li><li><a class="level is-mobile" href="#不足与注意事项"><span class="level-left"><span class="level-item">7</span><span class="level-item">不足与注意事项</span></span></a></li><li><a class="level is-mobile" href="#总结"><span class="level-left"><span class="level-item">8</span><span class="level-item">总结</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-06-07T00:23:23.000Z">2025-06-07</time></p><p class="title"><a href="/2025/06/07/Tauri%E6%A1%86%E6%9E%B6%E8%AF%A6%E8%A7%A3/">Tauri框架详解</a></p><p class="categories"><a href="/categories/%E5%89%8D%E7%AB%AF/">前端</a> / <a href="/categories/%E5%89%8D%E7%AB%AF/%E5%BA%93%E5%92%8C%E6%A1%86%E6%9E%B6/">库和框架</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-06-05T03:25:34.000Z">2025-06-05</time></p><p class="title"><a href="/2025/06/05/%E5%9C%A8Markdown%E4%B8%AD%E6%8F%92%E5%85%A5Video/">在Markdown中插入Video</a></p><p class="categories"><a href="/categories/%E8%BD%AF%E7%A1%AC%E4%BB%B6%E8%AE%BE%E5%A4%87/">软硬件设备</a> / <a href="/categories/%E8%BD%AF%E7%A1%AC%E4%BB%B6%E8%AE%BE%E5%A4%87/%E5%BC%80%E5%8F%91%E7%9B%B8%E5%85%B3/">开发相关</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-05-25T02:30:34.000Z">2025-05-25</time></p><p class="title"><a href="/2025/05/25/React%E8%B7%B3%E8%BD%AC%E4%B8%BA%E4%BB%80%E4%B9%88%E9%A1%B5%E9%9D%A2%E4%B8%8D%E9%87%8D%E8%BD%BD/">React跳转为什么页面不重载</a></p><p class="categories"><a href="/categories/%E5%89%8D%E7%AB%AF/">前端</a> / <a href="/categories/%E5%89%8D%E7%AB%AF/%E5%BA%93%E5%92%8C%E6%A1%86%E6%9E%B6/">库和框架</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-05-24T02:15:57.000Z">2025-05-24</time></p><p class="title"><a href="/2025/05/24/%E9%80%9A%E8%BF%87%E6%89%8B%E5%86%99hash%E8%B7%AF%E7%94%B1%E7%90%86%E8%A7%A3%E5%8D%95%E9%A1%B5%E5%BA%94%E7%94%A8/">通过手写hash路由理解单页应用</a></p><p class="categories"><a href="/categories/%E5%89%8D%E7%AB%AF/">前端</a> / <a href="/categories/%E5%89%8D%E7%AB%AF/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-05-23T12:04:56.000Z">2025-05-23</time></p><p class="title"><a href="/2025/05/23/%E5%88%9D%E8%AF%86TanStack-Query/">初识TanStack Query</a></p><p class="categories"><a href="/categories/%E5%89%8D%E7%AB%AF/">前端</a> / <a href="/categories/%E5%89%8D%E7%AB%AF/%E5%BA%93%E5%92%8C%E6%A1%86%E6%9E%B6/">库和框架</a></p></div></article></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.png" alt="小江的技术分享" height="28"></a><p class="is-size-7"><span>&copy; 2025 Fu9Zhou</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p><p class="is-size-7"> <p><a style="color:#4a4a4a;" target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">闽ICP备2025084052号-1</a></p> <p><a style="color:#4a4a4a;" target="_blank" rel="noopener" href="http://copyright.fjxuanchuan.cn/api/qkl/File/media/nas/newFileModel/2025/1/10/1944ee8d7655b8909fb6fe14d379a7e29a50da53eb4/OwnerCertificate.jpg">闽作登字-2025-F-00008490</a></p> <p> <img src="/img/gwab.png" style="width: 16px;"> <a style="color:#4a4a4a;" target="_blank" rel="noopener" href="https://beian.mps.gov.cn/#/query/webSearch?code=35010402351694">闽公网安备35010402351694号</a> </p> </p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="GitHub" href="https://github.com/fu9zhou"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><script src="/js/pjax.js"></script><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

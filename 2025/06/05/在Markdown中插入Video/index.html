@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>在Markdown中插入Video - 小江的技术分享</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="小江的技术分享"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="小江的技术分享"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="&amp;emsp;&amp;emsp;Markdown 是一种轻量级标记语言，广泛用于撰写文档、博客、项目 README 等。它以简洁的语法著称，但在嵌入视频这类富媒体内容时却没有原生语法支持。不过，借助 HTML 的能力，我们可以轻松地在 Markdown 文件中嵌入视频，实现展示和播放功能。本文将通过一个简单的示例，讲解如何在 Markdown 中插入视频标签，并说明各属性的作用与使用建议。"><meta property="og:type" content="blog"><meta property="og:title" content="在Markdown中插入Video"><meta property="og:url" content="https://fu9zhou.com/2025/06/05/%E5%9C%A8Markdown%E4%B8%AD%E6%8F%92%E5%85%A5Video/"><meta property="og:site_name" content="小江的技术分享"><meta property="og:description" content="&amp;emsp;&amp;emsp;Markdown 是一种轻量级标记语言，广泛用于撰写文档、博客、项目 README 等。它以简洁的语法著称，但在嵌入视频这类富媒体内容时却没有原生语法支持。不过，借助 HTML 的能力，我们可以轻松地在 Markdown 文件中嵌入视频，实现展示和播放功能。本文将通过一个简单的示例，讲解如何在 Markdown 中插入视频标签，并说明各属性的作用与使用建议。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://fu9zhou.com/img/og_image.png"><meta property="article:published_time" content="2025-06-05T03:25:34.000Z"><meta property="article:modified_time" content="2025-06-05T03:25:34.000Z"><meta property="article:author" content="Fu9Zhou"><meta property="article:tag" content="Markdown"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://fu9zhou.com/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://fu9zhou.com/2025/06/05/%E5%9C%A8Markdown%E4%B8%AD%E6%8F%92%E5%85%A5Video/"},"headline":"在Markdown中插入Video","image":["https://fu9zhou.com/img/og_image.png"],"datePublished":"2025-06-05T03:25:34.000Z","dateModified":"2025-06-05T03:25:34.000Z","author":{"@type":"Person","name":"Fu9Zhou"},"publisher":{"@type":"Organization","name":"小江的技术分享","logo":{"@type":"ImageObject","url":"https://fu9zhou.com/img/logo.png"}},"description":"&emsp;&emsp;Markdown 是一种轻量级标记语言，广泛用于撰写文档、博客、项目 README 等。它以简洁的语法著称，但在嵌入视频这类富媒体内容时却没有原生语法支持。不过，借助 HTML 的能力，我们可以轻松地在 Markdown 文件中嵌入视频，实现展示和播放功能。本文将通过一个简单的示例，讲解如何在 Markdown 中插入视频标签，并说明各属性的作用与使用建议。"}</script><link rel="canonical" href="https://fu9zhou.com/2025/06/05/%E5%9C%A8Markdown%E4%B8%AD%E6%8F%92%E5%85%A5Video/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?6cc7e72ea91beaff50270729f0b0f860";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.png" alt="小江的技术分享" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">首页</a><a class="navbar-item" href="/archives">文章</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="GitHub" href="https://github.com/fu9zhou"><i class="fab fa-github"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-06-05T03:25:34.000Z" title="2025/6/5 11:25:34">2025-06-05</time>发表</span><span class="level-item"><a class="link-muted" href="/categories/%E8%BD%AF%E7%A1%AC%E4%BB%B6%E8%AE%BE%E5%A4%87/">软硬件设备</a><span> / </span><a class="link-muted" href="/categories/%E8%BD%AF%E7%A1%AC%E4%BB%B6%E8%AE%BE%E5%A4%87/%E5%BC%80%E5%8F%91%E7%9B%B8%E5%85%B3/">开发相关</a></span><span class="level-item">4 分钟读完 (大约551个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">在Markdown中插入Video</h1><div class="content"><p>&emsp;&emsp;Markdown 是一种轻量级标记语言，广泛用于撰写文档、博客、项目 README 等。它以简洁的语法著称，但在嵌入视频这类富媒体内容时却没有原生语法支持。不过，借助 HTML 的能力，我们可以轻松地在 Markdown 文件中嵌入视频，实现展示和播放功能。本文将通过一个简单的示例，讲解如何在 Markdown 中插入视频标签，并说明各属性的作用与使用建议。</p>
+<span id="more"></span>
+
+<h1 id="基础写法"><a href="#基础写法" class="headerlink" title="基础写法"></a>基础写法</h1><p>虽然标准 Markdown 语法不支持 <code>&lt;video&gt;</code>，但大多数 Markdown 渲染器（如 GitHub Pages、Hexo、VuePress、VitePress、Typora 等）都支持内嵌 HTML 标签。因此我们可以直接插入以下代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">video</span> <span class="attr">controls</span> <span class="attr">width</span>=<span class="string">&quot;600&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">&quot;https://www.w3schools.com/html/movie.mp4&quot;</span> <span class="attr">type</span>=<span class="string">&quot;video/mp4&quot;</span>&gt;</span></span><br><span class="line">  您的浏览器不支持 video 标签。</span><br><span class="line"><span class="tag">&lt;/<span class="name">video</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>实际渲染效果如下（支持 HTML 渲染的平台上可播放）：</p>
+<video controls width="600">
+  <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
+  您的浏览器不支持 video 标签。
+</video>
+
+<h1 id="属性说明"><a href="#属性说明" class="headerlink" title="属性说明"></a>属性说明</h1><table>
+<thead>
+<tr>
+<th align="center">属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>controls</code></td>
+<td>显示浏览器默认的视频控制按钮</td>
+</tr>
+<tr>
+<td align="center"><code>width</code></td>
+<td>视频播放器的宽度（单位为像素）</td>
+</tr>
+<tr>
+<td align="center"><code>height</code></td>
+<td>可选，设置播放器高度</td>
+</tr>
+<tr>
+<td align="center"><code>autoplay</code></td>
+<td>自动播放（注意：现代浏览器对自动播放有音频限制）</td>
+</tr>
+<tr>
+<td align="center"><code>loop</code></td>
+<td>播放完自动重新开始播放</td>
+</tr>
+<tr>
+<td align="center"><code>muted</code></td>
+<td>静音播放，常与 <code>autoplay</code> 一起使用</td>
+</tr>
+<tr>
+<td align="center"><code>poster</code></td>
+<td>视频封面图，未播放时显示的图片 URL</td>
+</tr>
+</tbody></table>
+<h1 id="兼容性建议"><a href="#兼容性建议" class="headerlink" title="兼容性建议"></a>兼容性建议</h1><p>为了兼容不同浏览器，建议提供多种视频格式：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">video</span> <span class="attr">controls</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">&quot;video.mp4&quot;</span> <span class="attr">type</span>=<span class="string">&quot;video/mp4&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">&quot;video.ogg&quot;</span> <span class="attr">type</span>=<span class="string">&quot;video/ogg&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">&quot;video.webm&quot;</span> <span class="attr">type</span>=<span class="string">&quot;video/webm&quot;</span>&gt;</span></span><br><span class="line">  您的浏览器不支持 video 标签。</span><br><span class="line"><span class="tag">&lt;/<span class="name">video</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这样做可以保证在老旧浏览器中尽可能播放成功。</p>
+<h1 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h1><ul>
+<li><strong>自托管 vs 外链</strong>：若使用本地视频文件，应确保部署时视频路径正确；若使用外链视频，需注意带宽与版权问题。</li>
+<li><strong>响应式设计</strong>：建议配合 CSS 控制视频大小，如设置 <code>max-width: 100%</code> 以适配不同屏幕。</li>
+<li><strong>Markdown 渲染限制</strong>：部分平台（如某些静态博客引擎）默认禁用 HTML，请根据文档开启。</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>在Markdown中插入Video</p><p><a href="https://fu9zhou.com/2025/06/05/在Markdown中插入Video/">https://fu9zhou.com/2025/06/05/在Markdown中插入Video/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>Fu9Zhou</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2025-06-05</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="/httpscreativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Markdown/">Markdown</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2025/06/07/Tauri%E6%A1%86%E6%9E%B6%E8%AF%A6%E8%A7%A3/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Tauri框架详解</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2025/05/25/React%E8%B7%B3%E8%BD%AC%E4%B8%BA%E4%BB%80%E4%B9%88%E9%A1%B5%E9%9D%A2%E4%B8%8D%E9%87%8D%E8%BD%BD/"><span class="level-item">React跳转为什么页面不重载</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><!--!--><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-06-07T00:23:23.000Z">2025-06-07</time></p><p class="title"><a href="/2025/06/07/Tauri%E6%A1%86%E6%9E%B6%E8%AF%A6%E8%A7%A3/">Tauri框架详解</a></p><p class="categories"><a href="/categories/%E5%89%8D%E7%AB%AF/">前端</a> / <a href="/categories/%E5%89%8D%E7%AB%AF/%E5%BA%93%E5%92%8C%E6%A1%86%E6%9E%B6/">库和框架</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-06-05T03:25:34.000Z">2025-06-05</time></p><p class="title"><a href="/2025/06/05/%E5%9C%A8Markdown%E4%B8%AD%E6%8F%92%E5%85%A5Video/">在Markdown中插入Video</a></p><p class="categories"><a href="/categories/%E8%BD%AF%E7%A1%AC%E4%BB%B6%E8%AE%BE%E5%A4%87/">软硬件设备</a> / <a href="/categories/%E8%BD%AF%E7%A1%AC%E4%BB%B6%E8%AE%BE%E5%A4%87/%E5%BC%80%E5%8F%91%E7%9B%B8%E5%85%B3/">开发相关</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-05-25T02:30:34.000Z">2025-05-25</time></p><p class="title"><a href="/2025/05/25/React%E8%B7%B3%E8%BD%AC%E4%B8%BA%E4%BB%80%E4%B9%88%E9%A1%B5%E9%9D%A2%E4%B8%8D%E9%87%8D%E8%BD%BD/">React跳转为什么页面不重载</a></p><p class="categories"><a href="/categories/%E5%89%8D%E7%AB%AF/">前端</a> / <a href="/categories/%E5%89%8D%E7%AB%AF/%E5%BA%93%E5%92%8C%E6%A1%86%E6%9E%B6/">库和框架</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-05-24T02:15:57.000Z">2025-05-24</time></p><p class="title"><a href="/2025/05/24/%E9%80%9A%E8%BF%87%E6%89%8B%E5%86%99hash%E8%B7%AF%E7%94%B1%E7%90%86%E8%A7%A3%E5%8D%95%E9%A1%B5%E5%BA%94%E7%94%A8/">通过手写hash路由理解单页应用</a></p><p class="categories"><a href="/categories/%E5%89%8D%E7%AB%AF/">前端</a> / <a href="/categories/%E5%89%8D%E7%AB%AF/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-05-23T12:04:56.000Z">2025-05-23</time></p><p class="title"><a href="/2025/05/23/%E5%88%9D%E8%AF%86TanStack-Query/">初识TanStack Query</a></p><p class="categories"><a href="/categories/%E5%89%8D%E7%AB%AF/">前端</a> / <a href="/categories/%E5%89%8D%E7%AB%AF/%E5%BA%93%E5%92%8C%E6%A1%86%E6%9E%B6/">库和框架</a></p></div></article></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.png" alt="小江的技术分享" height="28"></a><p class="is-size-7"><span>&copy; 2025 Fu9Zhou</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p><p class="is-size-7"> <p><a style="color:#4a4a4a;" target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">闽ICP备2025084052号-1</a></p> <p><a style="color:#4a4a4a;" target="_blank" rel="noopener" href="http://copyright.fjxuanchuan.cn/api/qkl/File/media/nas/newFileModel/2025/1/10/1944ee8d7655b8909fb6fe14d379a7e29a50da53eb4/OwnerCertificate.jpg">闽作登字-2025-F-00008490</a></p> <p> <img src="/img/gwab.png" style="width: 16px;"> <a style="color:#4a4a4a;" target="_blank" rel="noopener" href="https://beian.mps.gov.cn/#/query/webSearch?code=35010402351694">闽公网安备35010402351694号</a> </p> </p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="GitHub" href="https://github.com/fu9zhou"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><script src="/js/pjax.js"></script><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
