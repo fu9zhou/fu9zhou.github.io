@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>tRPC通信 - 小江的技术分享</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="小江的技术分享"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="小江的技术分享"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="&amp;emsp;&amp;emsp;在构建前后端分离或全栈 TypeScript 应用时，我们经常需要维护 API 类型定义、DTO、接口文档等内容。而一旦前后端协作中某个字段改了、类型不一致，就会带来一连串的维护成本。 &amp;emsp;&amp;emsp;有没有一种方式，让我们在后端写一个函数，前端就可以直接调用它，并自动享受类型提示和校验？这正是 tRPC 想要解决的问题。"><meta property="og:type" content="blog"><meta property="og:title" content="tRPC通信"><meta property="og:url" content="https://fu9zhou.com/2025/07/07/tRPC%E9%80%9A%E4%BF%A1/"><meta property="og:site_name" content="小江的技术分享"><meta property="og:description" content="&amp;emsp;&amp;emsp;在构建前后端分离或全栈 TypeScript 应用时，我们经常需要维护 API 类型定义、DTO、接口文档等内容。而一旦前后端协作中某个字段改了、类型不一致，就会带来一连串的维护成本。 &amp;emsp;&amp;emsp;有没有一种方式，让我们在后端写一个函数，前端就可以直接调用它，并自动享受类型提示和校验？这正是 tRPC 想要解决的问题。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://fu9zhou.com/img/og_image.png"><meta property="article:published_time" content="2025-07-07T13:18:04.000Z"><meta property="article:modified_time" content="2025-07-07T13:18:04.000Z"><meta property="article:author" content="Fu9Zhou"><meta property="article:tag" content="小江, Fu9Zhou, 前端开发, 技术分享"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://fu9zhou.com/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://fu9zhou.com/2025/07/07/tRPC%E9%80%9A%E4%BF%A1/"},"headline":"tRPC通信","image":["https://fu9zhou.com/img/og_image.png"],"datePublished":"2025-07-07T13:18:04.000Z","dateModified":"2025-07-07T13:18:04.000Z","author":{"@type":"Person","name":"Fu9Zhou"},"publisher":{"@type":"Organization","name":"小江的技术分享","logo":{"@type":"ImageObject","url":"https://fu9zhou.com/img/logo.png"}},"description":"&emsp;&emsp;在构建前后端分离或全栈 TypeScript 应用时，我们经常需要维护 API 类型定义、DTO、接口文档等内容。而一旦前后端协作中某个字段改了、类型不一致，就会带来一连串的维护成本。 &emsp;&emsp;有没有一种方式，让我们在后端写一个函数，前端就可以直接调用它，并自动享受类型提示和校验？这正是 tRPC 想要解决的问题。"}</script><link rel="canonical" href="https://fu9zhou.com/2025/07/07/tRPC%E9%80%9A%E4%BF%A1/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?6cc7e72ea91beaff50270729f0b0f860";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.png" alt="小江的技术分享" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">首页</a><a class="navbar-item" href="/archives">文章</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="GitHub" href="https://github.com/fu9zhou"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-07-07T13:18:04.000Z" title="2025/7/7 21:18:04">2025-07-07</time>发表</span><span class="level-item">7 分钟读完 (大约1011个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">tRPC通信</h1><div class="content"><p>&emsp;&emsp;在构建前后端分离或全栈 TypeScript 应用时，我们经常需要维护 API 类型定义、DTO、接口文档等内容。而一旦前后端协作中某个字段改了、类型不一致，就会带来一连串的维护成本。</p>
+<p>&emsp;&emsp;有没有一种方式，<strong>让我们在后端写一个函数，前端就可以直接调用它，并自动享受类型提示和校验？</strong>这正是 <strong>tRPC</strong> 想要解决的问题。</p>
+<span id="more"></span>
+
+<h1 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h1><p>**<a target="_blank" rel="noopener" href="https://trpc.io/docs">tRPC</a>**（TypeScript Remote Procedure Call）是一个用于构建 <strong>类型安全 API</strong> 的框架，它允许你在 <strong>没有代码生成、没有手动同步类型定义</strong> 的前提下，直接在前后端共享类型，并像调用本地函数一样调用远端接口。</p>
+<p>简单来说，就是用 TypeScript 写后端函数，前端像调用本地函数一样调用它，同时可以享受完整的类型提示。</p>
+<h1 id="方案优点"><a href="#方案优点" class="headerlink" title="方案优点"></a>方案优点</h1><p>传统方案（REST &#x2F; GraphQL）：</p>
+<ul>
+<li>类型定义需要手动维护或用代码生成</li>
+<li>需要维护接口文档（如 Swagger）</li>
+<li>API 请求参数与返回类型解耦，容易出错</li>
+</ul>
+<p>而 tRPC 提供了一个新范式：</p>
+<ul>
+<li><strong>类型自动推导，前后端 100% 类型一致</strong></li>
+<li><strong>零代码生成，零配置即可使用</strong></li>
+<li><strong>轻量高效，基于函数调用模型</strong></li>
+<li><strong>与 Next.js、Express 等无缝集成</strong></li>
+</ul>
+<h1 id="原理简述"><a href="#原理简述" class="headerlink" title="原理简述"></a>原理简述</h1><p>tRPC 的基本模式是：</p>
+<ul>
+<li>后端定义一个“路由”（其实是函数集合）</li>
+<li>前端通过 <code>createTRPCClient</code> 创建客户端</li>
+<li>调用路由中的函数，就像在调用本地方法</li>
+</ul>
+<p>tRPC 会自动处理：</p>
+<ul>
+<li>参数校验</li>
+<li>类型推导</li>
+<li>异步通信</li>
+<li>结果反序列化（支持如 <code>Date</code> 等复杂类型）</li>
+</ul>
+<h1 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h1><h2 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install @trpc/server @trpc/client zod superjson</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>通常搭配 Zod 做参数校验，SuperJSON 负责序列化复杂类型。</p>
+</blockquote>
+<h2 id="创建-tRPC-后端路由"><a href="#创建-tRPC-后端路由" class="headerlink" title="创建 tRPC 后端路由"></a>创建 tRPC 后端路由</h2><p>以 <code>Next.js</code> 为例</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// server/router.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; initTRPC &#125; <span class="keyword">from</span> <span class="string">&#x27;@trpc/server&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; z &#125; <span class="keyword">from</span> <span class="string">&#x27;zod&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> t = initTRPC.<span class="title function_">create</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> appRouter = t.<span class="title function_">router</span>(&#123;</span><br><span class="line">  <span class="attr">hello</span>: t.<span class="property">procedure</span></span><br><span class="line">    .<span class="title function_">input</span>(z.<span class="title function_">object</span>(&#123; <span class="attr">name</span>: z.<span class="title function_">string</span>() &#125;))</span><br><span class="line">    .<span class="title function_">query</span>(<span class="function">(<span class="params">&#123; input &#125;</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123; <span class="attr">message</span>: <span class="string">`Hello, <span class="subst">$&#123;input.name&#125;</span>!`</span>, <span class="attr">time</span>: <span class="keyword">new</span> <span class="title class_">Date</span>() &#125;</span><br><span class="line">    &#125;),</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">type</span> <span class="title class_">AppRouter</span> = <span class="keyword">typeof</span> appRouter</span><br></pre></td></tr></table></figure>
+
+<h2 id="API-处理器"><a href="#API-处理器" class="headerlink" title="API 处理器"></a>API 处理器</h2><p>以 <code>Next.js</code> 为例</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// pages/api/trpc/[trpc].ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; createNextApiHandler &#125; <span class="keyword">from</span> <span class="string">&#x27;@trpc/server/adapters/next&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; appRouter &#125; <span class="keyword">from</span> <span class="string">&#x27;@/server/router&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">createNextApiHandler</span>(&#123;</span><br><span class="line">  <span class="attr">router</span>: appRouter,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="客户端调用"><a href="#客户端调用" class="headerlink" title="客户端调用"></a>客户端调用</h2><p>使用 <code>SuperJSON</code> 处理</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// utils/trpc.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; createTRPCClient &#125; <span class="keyword">from</span> <span class="string">&#x27;@trpc/client&#x27;</span></span><br><span class="line"><span class="keyword">import</span> superjson <span class="keyword">from</span> <span class="string">&#x27;superjson&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="keyword">type</span> &#123; <span class="title class_">AppRouter</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@/server/router&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> trpc = createTRPCClient&lt;<span class="title class_">AppRouter</span>&gt;(&#123;</span><br><span class="line">  <span class="attr">url</span>: <span class="string">&#x27;/api/trpc&#x27;</span>,</span><br><span class="line">  <span class="attr">transformer</span>: superjson,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>调用方式：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> result = <span class="keyword">await</span> trpc.<span class="property">hello</span>.<span class="title function_">query</span>(&#123; <span class="attr">name</span>: <span class="string">&#x27;Allen&#x27;</span> &#125;)</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(result.<span class="property">message</span>) <span class="comment">// Hello, Allen!</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(result.<span class="property">time</span> <span class="keyword">instanceof</span> <span class="title class_">Date</span>) <span class="comment">// true （因为用了 SuperJSON）</span></span><br></pre></td></tr></table></figure>
+
+<p>这里 SuperJSON 的作用：</p>
+<p>默认 JSON 无法正确传输如 <code>Date</code>, <code>BigInt</code>, <code>Map</code>, <code>undefined</code> 等复杂类型。</p>
+<p><code>tRPC</code> 默认集成了 <strong>SuperJSON</strong>，用于序列化这些特殊数据结构，确保：</p>
+<ul>
+<li>时间仍是 <code>Date</code></li>
+<li>大整数不会被截断</li>
+<li>错误对象结构完整</li>
+<li>在 Redis、本地缓存、服务端传输中都能保持数据一致性</li>
+</ul>
+<h1 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h1><ul>
+<li><strong>构建全栈 TypeScript 应用</strong>（React + Next.js + tRPC）</li>
+<li><strong>API 类型严格校验，无需写接口文档</strong></li>
+<li><strong>快速开发原型或 MVP 项目</strong></li>
+<li><strong>后端逻辑暴露给前端进行复用测试</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">特性</th>
+<th>REST</th>
+<th>GraphQL</th>
+<th>tRPC</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">类型共享</td>
+<td>❌ 手动 &#x2F; 生成</td>
+<td>⚠️ 需生成</td>
+<td>✅ 自动</td>
+</tr>
+<tr>
+<td align="center">类型推导</td>
+<td>❌</td>
+<td>部分支持</td>
+<td>✅</td>
+</tr>
+<tr>
+<td align="center">使用复杂类型</td>
+<td>❌</td>
+<td>⚠️ 需自定义标量</td>
+<td>✅（默认支持）</td>
+</tr>
+<tr>
+<td align="center">代码生成</td>
+<td>❌ &#x2F; ⚠️</td>
+<td>✅ 推荐</td>
+<td>❌ 不需要</td>
+</tr>
+<tr>
+<td align="center">使用难度</td>
+<td>中</td>
+<td>高</td>
+<td>低</td>
+</tr>
+<tr>
+<td align="center">使用场景</td>
+<td>任意</td>
+<td>API 聚合</td>
+<td>TypeScript 项目最佳</td>
+</tr>
+</tbody></table>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p><code>tRPC</code> 是现代 TypeScript 项目的理想选择，尤其适合使用 <strong>Next.js、React、Zustand、Prisma 等技术栈</strong> 的开发者。它不仅能提升开发效率，还能显著减少前后端沟通成本。 <code>SuperJSON</code> 的加入，让 tRPC 通信在处理复杂数据结构时更加健壮可靠。</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>tRPC通信</p><p><a href="https://fu9zhou.com/2025/07/07/tRPC通信/">https://fu9zhou.com/2025/07/07/tRPC通信/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>Fu9Zhou</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2025-07-07</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="/httpscreativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2025/07/10/%E4%BD%BF%E7%94%A8husky%E8%A7%84%E8%8C%83%E4%BB%A3%E7%A0%81%E6%8F%90%E4%BA%A4/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">使用husky规范代码提交</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2025/07/07/SuperJSON%E5%A4%84%E7%90%86%E5%89%8D%E5%90%8E%E7%AB%AF%E4%BC%A0%E5%80%BC/"><span class="level-item">SuperJSON处理前后端传值</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#是什么"><span class="level-left"><span class="level-item">1</span><span class="level-item">是什么</span></span></a></li><li><a class="level is-mobile" href="#方案优点"><span class="level-left"><span class="level-item">2</span><span class="level-item">方案优点</span></span></a></li><li><a class="level is-mobile" href="#原理简述"><span class="level-left"><span class="level-item">3</span><span class="level-item">原理简述</span></span></a></li><li><a class="level is-mobile" href="#使用实例"><span class="level-left"><span class="level-item">4</span><span class="level-item">使用实例</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#安装依赖"><span class="level-left"><span class="level-item">4.1</span><span class="level-item">安装依赖</span></span></a></li><li><a class="level is-mobile" href="#创建-tRPC-后端路由"><span class="level-left"><span class="level-item">4.2</span><span class="level-item">创建 tRPC 后端路由</span></span></a></li><li><a class="level is-mobile" href="#API-处理器"><span class="level-left"><span class="level-item">4.3</span><span class="level-item">API 处理器</span></span></a></li><li><a class="level is-mobile" href="#客户端调用"><span class="level-left"><span class="level-item">4.4</span><span class="level-item">客户端调用</span></span></a></li></ul></li><li><a class="level is-mobile" href="#应用场景"><span class="level-left"><span class="level-item">5</span><span class="level-item">应用场景</span></span></a></li><li><a class="level is-mobile" href="#小结"><span class="level-left"><span class="level-item">6</span><span class="level-item">小结</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-07-24T10:42:53.000Z">2025-07-24</time></p><p class="title"><a href="/2025/07/24/%E5%89%8D%E7%AB%AF%E6%97%A0%E6%84%9F%E5%88%B7%E6%96%B0Token/">前端无感刷新Token</a></p><p class="categories"><a href="/categories/%E5%89%8D%E7%AB%AF/">前端</a> / <a href="/categories/%E5%89%8D%E7%AB%AF/%E6%8A%80%E6%9C%AF%E5%AE%9E%E7%8E%B0/">技术实现</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-07-22T11:05:18.000Z">2025-07-22</time></p><p class="title"><a href="/2025/07/22/HttpOnly-Cookie-%E5%85%A8%E8%A7%A3%E6%9E%90/">HttpOnly Cookie 全解析</a></p><p class="categories"><a href="/categories/%E5%89%8D%E7%AB%AF/">前端</a> / <a href="/categories/%E5%89%8D%E7%AB%AF/%E6%8A%80%E6%9C%AF%E5%AE%9E%E7%8E%B0/">技术实现</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-07-10T11:27:00.000Z">2025-07-10</time></p><p class="title"><a href="/2025/07/10/%E4%BD%BF%E7%94%A8husky%E8%A7%84%E8%8C%83%E4%BB%A3%E7%A0%81%E6%8F%90%E4%BA%A4/">使用husky规范代码提交</a></p><p class="categories"><a href="/categories/%E8%BD%AF%E7%A1%AC%E4%BB%B6%E8%AE%BE%E5%A4%87/">软硬件设备</a> / <a href="/categories/%E8%BD%AF%E7%A1%AC%E4%BB%B6%E8%AE%BE%E5%A4%87/%E5%BC%80%E5%8F%91%E7%9B%B8%E5%85%B3/">开发相关</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-07-07T13:18:04.000Z">2025-07-07</time></p><p class="title"><a href="/2025/07/07/tRPC%E9%80%9A%E4%BF%A1/">tRPC通信</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-07-07T13:09:46.000Z">2025-07-07</time></p><p class="title"><a href="/2025/07/07/SuperJSON%E5%A4%84%E7%90%86%E5%89%8D%E5%90%8E%E7%AB%AF%E4%BC%A0%E5%80%BC/">SuperJSON处理前后端传值</a></p><p class="categories"><a href="/categories/%E5%89%8D%E7%AB%AF/">前端</a> / <a href="/categories/%E5%89%8D%E7%AB%AF/%E5%BA%93%E5%92%8C%E6%A1%86%E6%9E%B6/">库和框架</a></p></div></article></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.png" alt="小江的技术分享" height="28"></a><p class="is-size-7"><span>&copy; 2026 Fu9Zhou</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p><p class="is-size-7"> <p><a style="color:#4a4a4a;" target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">闽ICP备2025084052号-1</a></p> <p><a style="color:#4a4a4a;" target="_blank" rel="noopener" href="http://copyright.fjxuanchuan.cn/api/qkl/File/media/nas/newFileModel/2025/1/10/1944ee8d7655b8909fb6fe14d379a7e29a50da53eb4/OwnerCertificate.jpg">闽作登字-2025-F-00008490</a></p> <p> <img src="/img/gwab.png" style="width: 16px;"> <a style="color:#4a4a4a;" target="_blank" rel="noopener" href="https://beian.mps.gov.cn/#/query/webSearch?code=35010402351694">闽公网安备35010402351694号</a> </p> </p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="GitHub" href="https://github.com/fu9zhou"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><script src="/js/pjax.js"></script><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
